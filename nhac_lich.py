@@ -73,6 +73,10 @@ def gui_thong_bao():
                 requests.post(WEBHOOK_URL, json=data)
                 print(f"Đã gửi lịch học ngày {hom_nay}")
             else:
+                data = {
+                "content": "Hôm nay không có lịch học (っ- ‸ - ς)ᶻ 𝗓 𐰁 "
+                }
+                requests.post(WEBHOOK_URL, json=data)
                 print(f"Hôm nay ({hom_nay}): Không có lịch học")
                 
         elif ngay == 27:
