@@ -36,8 +36,8 @@ def gui_thong_bao():
     tz_vn = timezone(timedelta(hours=7))
     now = datetime.now(tz_vn)
     
-    hom_nay = "27/09"#now.strftime("%d/%m")
-    ngay = 27#now.day
+    hom_nay = "13/09"#now.strftime("%d/%m")
+    ngay = 13#now.day
     thang = now.month
 
     # Logic thời gian chạy tự động
@@ -49,7 +49,7 @@ def gui_thong_bao():
             if hom_nay in LICH_HOC:
                 lich = LICH_HOC[hom_nay]
                 data = {
-                    "content": "Goooood Morning!🪖⏰",
+                    "content": "Goooood Morning! ٩(ˊ〇ˋ*)⏰",
                     "embeds": [{
                         "title": f"📅 LỊCH HỌC GDQP&AN - HÔM NAY ({hom_nay})",
                         "color": 3066993,
@@ -66,7 +66,7 @@ def gui_thong_bao():
                             }
                         ],
                         "footer": {
-                            "text": "📌 Nhắc nhở: Ăn sáng/tối tại Tầng trệt nhà ăn 1 (ca 1)."
+                            "text": "📌 Nhắc nhở: Ăn trưa: tầng trệt nhà ăn 1 (ca1) (từ th2 đến th7);\nĂn sáng/tối tại Tầng trệt nhà ăn 1 (ca 1)."
                         }
                     }]
                 }
@@ -78,7 +78,7 @@ def gui_thong_bao():
         elif ngay == 27:
             # Sáng 27/9 (sau ngày thi cuối cùng) sẽ tự động gửi tin này
             data = {
-                "content": "🎉 **BÁO CÁO HOÀN THÀNH NHIỆM VỤ!** 🎉\nChúc mừng chồng iu đã hoàn thành xuất xắc nhiệm vụ 🥳"
+                "content": "🎉 **KẾT THÚC MÔN HỌC!** 🎉\nChúc mừng chồng iu đã hoàn thành xuất xắc nhiệm vụ ⸜(｡˃ ᵕ ˂ )⸝♡"
             }
             requests.post(WEBHOOK_URL, json=data)
             print("Đã gửi tin nhắn chúc mừng xuất ngũ.")
