@@ -32,43 +32,61 @@ def gui_thong_bao():
         print("Lỗi: Chưa cấu hình WEBHOOK_URL")
         return
 
-    # Lấy múi giờ Việt Nam (UTC+7)
+    # Lấy thời gian thực (UTC+7)
     tz_vn = timezone(timedelta(hours=7))
-    hom_nay = datetime.now(tz_vn).strftime("%d/%m")
+    now = datetime.now(tz_vn)
     
-    if hom_nay in LICH_HOC:
-        lich = LICH_HOC[hom_nay]
-        
-        data = {
-            "content": "Gooood morning! Dậy đi học Quốc Phòng thôi đồng chí! 🪖",
-            "embeds": [{
-                "title": f"📅 LỊCH HỌC GDQP&AN - HÔM NAY ({hom_nay})",
-                "color": 3066993,
-                "fields": [
-                    {
-                        "name": "🌅 Sáng (7h30 - 11h00)",
-                        "value": f"**Nội dung:** {lich['sáng']['nd']}\n**Vị trí:** {lich['sáng']['vt']}\n**Giảng viên:** {lich['sáng']['gv']}",
-                        "inline": False
-                    },
-                    {
-                        "name": "🌇 Chiều (13h30 - 16h30)",
-                        "value": f"**Nội dung:** {lich['chiều']['nd']}\n**Vị trí:** {lich['chiều']['vt']}\n**Giảng viên:** {lich['chiều']['gv']}",
-                        "inline": False
-                    }
-                ],
-                "footer": {
-                    "text": "📌 Nhắc nhở: Ăn sáng/tối tại Tầng trệt nhà ăn 1 (ca 1)."
+    hom_nay = now.strftime("%d/%m")
+    ngay = now.day
+    thang = now.month
+
+    # Logic thời gian chạy tự động
+    if thang == 9:
+        if ngay < 7:
+            print(f"Hôm nay ({hom_nay}): Chưa đến ngày nhập học quân sự.")
+            
+        elif 7 <= ngay <= 26:
+            if hom_nay in LICH_HOC:
+                lich = LICH_HOC[hom_nay]
+                data = {
+                    "content": "Goooood Morning!🪖⏰",
+                    "embeds": [{
+                        "title": f"📅 LỊCH HỌC GDQP&AN - HÔM NAY ({hom_nay})",
+                        "color": 3066993,
+                        "fields": [
+                            {
+                                "name": "🌅 Sáng (7h30 - 11h00)",
+                                "value": f"**Nội dung:** {lich['sáng']['nd']}\n**Vị trí:** {lich['sáng']['vt']}\n**Giảng viên:** {lich['sáng']['gv']}",
+                                "inline": False
+                            },
+                            {
+                                "name": "🌇 Chiều (13h30 - 16h30)",
+                                "value": f"**Nội dung:** {lich['chiều']['nd']}\n**Vị trí:** {lich['chiều']['vt']}\n**Giảng viên:** {lich['chiều']['gv']}",
+                                "inline": False
+                            }
+                        ],
+                        "footer": {
+                            "text": "📌 Nhắc nhở: Ăn sáng/tối tại Tầng trệt nhà ăn 1 (ca 1)."
+                        }
+                    }]
                 }
-            }]
-        }
-        
-        response = requests.post(WEBHOOK_URL, json=data)
-        if response.status_code == 204:
-            print(f"Đã gửi thành công lịch ngày {hom_nay}")
+                requests.post(WEBHOOK_URL, json=data)
+                print(f"Đã gửi lịch học ngày {hom_nay}")
+            else:
+                print(f"Hôm nay ({hom_nay}): Không có lịch học")
+                
+        elif ngay == 27:
+            # Sáng 27/9 (sau ngày thi cuối cùng) sẽ tự động gửi tin này
+            data = {
+                "content": "🎉 **BÁO CÁO HOÀN THÀNH NHIỆM VỤ!** 🎉\nChúc mừng chồng iu đã hoàn thành xuất xắc nhiệm vụ 🥳"
+            }
+            requests.post(WEBHOOK_URL, json=data)
+            print("Đã gửi tin nhắn chúc mừng xuất ngũ.")
+            
         else:
-            print(f"Lỗi gửi tin nhắn: {response.status_code}")
+            print(f"Hôm nay ({hom_nay}): Đã học xong, bot chuyển về trạng thái nghỉ.")
     else:
-        print(f"Hôm nay ({hom_nay}) không có lịch học.")
+        print("Không nằm trong tháng diễn ra môn học.")
 
 if __name__ == "__main__":
     gui_thong_bao()
