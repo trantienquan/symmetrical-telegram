@@ -36,8 +36,8 @@ def gui_thong_bao():
     tz_vn = timezone(timedelta(hours=7))
     now = datetime.now(tz_vn)
     
-    hom_nay = "13/09"#now.strftime("%d/%m")
-    ngay = 13#now.day
+    hom_nay = "22/09"#now.strftime("%d/%m")
+    ngay = 22#now.day
     thang = now.month
 
     # Logic thời gian chạy tự động
