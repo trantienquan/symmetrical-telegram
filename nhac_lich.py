@@ -36,14 +36,26 @@ def gui_thong_bao():
     tz_vn = timezone(timedelta(hours=7))
     now = datetime.now(tz_vn)
     
-    hom_nay = "22/09"#now.strftime("%d/%m")
-    ngay = 22#now.day
+    hom_nay = now.strftime("%d/%m")
+    ngay = now.day
     thang = now.month
 
     # Logic thời gian chạy tự động
     if thang == 9:
         if ngay < 7:
-            print(f"Hôm nay ({hom_nay}): Chưa đến ngày nhập học quân sự.")
+            so_ngay_con_lai = 7 - ngay
+            data = {
+                "content": f"⏰ **ĐẾM NGƯỢC NGÀY NHẬP HỌC QUÂN SỰ!**",
+                "embeds": [{
+                    "description": f"Chỉ còn **{so_ngay_con_lai} ngày** nữa là đến ngày tập trung (**07/09/2026**).",
+                    "color": 15844367,  # Màu cam cảnh báo
+                    "footer": {
+                        "text": f"Hôm nay là {hom_nay} • Tranh thủ nghỉ ngơi chuẩn bị thể lực nhé!"
+                    }
+                }]
+            }
+            requests.post(WEBHOOK_URL, json=data)
+            print(f"Đã gửi đếm ngược: Còn {so_ngay_con_lai} ngày.")
             
         elif 7 <= ngay <= 26:
             if hom_nay in LICH_HOC:
@@ -66,7 +78,7 @@ def gui_thong_bao():
                             }
                         ],
                         "footer": {
-                            "text": "📌 Nhắc nhở: Ăn trưa: tầng trệt nhà ăn 1 (ca1) (từ th2 đến th7);\nĂn sáng/tối tại Tầng trệt nhà ăn 1 (ca 1)."
+                            "text": "📌 Nhắc nhở: Ăn trưa: tầng trệt nhà ăn 1 (ca1) (từ th2 đến th7);\nĂn sáng/tối tại Tầng trệt nhà ăn 1 (ca 1) (từ th2 đến th7)."
                         }
                     }]
                 }
